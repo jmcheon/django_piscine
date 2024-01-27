@@ -46,7 +46,6 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         item_list = [item.strip() for item in sys.argv[1].split(",")]
         item_list = [item for item in item_list if item]
-        print(item_list)
         for item in item_list:
             if not (print_state(item) or print_capital_city(item)):
                 print(item, "is neither a capital city nor a state")
