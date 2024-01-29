@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{title}</title>
+</head>
+<body>
+	<p>"-Who are you?
+	<section>
+	    <div>
+	  	  <div>Name:{name}</div>
+	  	  <div>Surname:{surname}</div>
+	    </div>
+	</section>
+</body>
+</html>
