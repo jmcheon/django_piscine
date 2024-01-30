@@ -1,0 +1,24 @@
+Vagrant.configure("2") do |config|
+  SERVER_BOX = "ubuntu/bionic64"
+  SERVER_USERNAME = "cjung-mo"
+  SERVER_USER_PASSWORD = "cjung-mo"
+  SERVER_HOSTNAME = "vm-ubuntu"
+  SERVER_IP = "192.168.56.10"
+  #SHARED_FOLDER_PATH = "./shared_folder"
+  SHARED_FOLDER_PATH = "../srcs"
+
+    config.vm.define "django" do |server|
+      server.vm.box = SERVER_BOX 
+      server.vm.hostname = "#{SERVER_HOSTNAME}" 
+      server.vm.network "private_network", ip: "#{SERVER_IP}"
+	  server.vm.network "forwarded_port", guest: 8000, host: "8000"
+	  server.vm.network "forwarded_port", guest: 8080, host: "8080"
+      #server.ssh.username = "#{SERVER_USERNAME}"
+      server.vm.provider "virtualbox" do |vb|
+        vb.memory = "8192"
+        vb.cpus = 12
+      server.vm.provision :shell, path: "bootstrap.sh"
+      server.vm.synced_folder "#{SHARED_FOLDER_PATH}", "/home/vagrant/srcs"
+    end
+  end
+end
