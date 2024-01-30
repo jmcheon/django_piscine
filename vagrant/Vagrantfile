@@ -4,8 +4,7 @@ Vagrant.configure("2") do |config|
   SERVER_USER_PASSWORD = "cjung-mo"
   SERVER_HOSTNAME = "vm-ubuntu"
   SERVER_IP = "192.168.56.10"
-  #SHARED_FOLDER_PATH = "./shared_folder"
-  SHARED_FOLDER_PATH = "../srcs"
+  SHARED_FOLDER_PATH = "../modules"
 
     config.vm.define "django" do |server|
       server.vm.box = SERVER_BOX 
