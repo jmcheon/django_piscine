@@ -10,9 +10,10 @@ def print_capital_city(state):
         "CO": "Denver",
     }
     found = False
-    for item in states.keys():
-        if state.lower() == item.lower():
-            print(state, "is a state")
+    for state_key, state_value in states.items():
+        if state.lower() == state_key.lower():
+            # print(state_key, "is a state")
+            print(capital_cities[state_value], "is the capital of", state_key)
             found = True
             break
     if found == False:
@@ -31,10 +32,10 @@ def print_state(city):
     state_found = False
 
     for city_key, city_value in capital_cities.items():
-        if city == city_value:
+        if city.lower() == city_value.lower():
             for state_key, state_value in states.items():
                 if city_key == state_value:
-                    print(city, "is the capital of", state_key)
+                    print(city_value, "is the capital of", state_key)
                     state_found = True
                     break
     if state_found == False:
