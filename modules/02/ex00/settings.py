@@ -1,3 +1,5 @@
 title = "CV"
 name = "J"
 surname = "M"
+age = "30"
+profession = "web master"

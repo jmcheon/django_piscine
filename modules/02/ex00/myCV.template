@@ -8,8 +8,10 @@
 	<p>"-Who are you?
 	<section>
 	    <div>
-	  	  <div>Name:{name}</div>
-	  	  <div>Surname:{surname}</div>
+		  <div>Name:{name}</div>
+		  <div>Surname:{surname}</div>
+		  <div>Age:{age}</div>
+		  <div>Profession:{profession}</div>
 	    </div>
 	</section>
 </body>
