@@ -83,7 +83,11 @@ class Br(Elem):
 
 if __name__ == '__main__':
     #print( Html( [Head(), Body()] ) )
-    elem = Html([Head(Title(Text('"Hello ground!"'))),
-				    Body([H1(Text('"Oh no, not again!"')),
-				            Img(attr={'src':'http://i.imgur.com/pfp3T.jpg'})])])
+    elem = Html([
+                Head(Title(Text('"Hello ground!"'))),
+                Body([
+                    H1(Text('"Oh no, not again!"')),
+                    Img(attr={'src':'http://i.imgur.com/pfp3T.jpg'})
+                    ])
+                ])
     print(elem)

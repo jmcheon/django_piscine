@@ -1,8 +1,7 @@
 import sys
 
-from elements import (H1, H2, Body, Br, Div, Elem, Head, Hr, Html, Html2, Img,
-                      Li, Meta, Ol, P, Span, Table, Td, Text, Th, Title, Tr,
-                      Ul)
+from elements import (H1, H2, Body, Br, Div, Elem, Head, Hr, Html, Img,
+                        Li, Meta, Ol, P, Span, Table, Td, Text, Th, Title, Tr, Ul)
 from Page import Page
 
 
@@ -195,9 +194,9 @@ class PageTester():
     def __one_Text(self):
         print("\n{:=^42s}\n".format("Title H1 H2 Li Th Td"))
         elem = Html([
-            Head(Title(Text('"Hello ground!"'))),
-    				    Body([H1(),
-                  ])])
+                    Head(Title(Text('"Hello ground!"'))),
+                    Body([H1(),])
+                    ])
         page = Page(elem)
         self.is_valid(page)
     
@@ -222,5 +221,5 @@ class PageTester():
         self.is_valid(page)
 
 if __name__ == "__main__":
-    tester = PageTester()
+    tester = PageTester(print_error_msg=True, print_code=True)
     tester.test()

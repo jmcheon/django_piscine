@@ -1,10 +1,8 @@
-from elements import (H1, H2, Body, Br, Div, Elem, Head, Hr, Html, Html2, Img,
-                      Li, Meta, Ol, P, Span, Table, Td, Text, Th, Title, Tr,
-                      Ul)
+from elements import (H1, H2, Body, Br, Div, Elem, Head, Hr, Html, Img,
+                        Li, Meta, Ol, P, Span, Table, Td, Text, Th, Title, Tr, Ul)
 
 ALLOWED_TAGS = (H1, H2, Body, Br, Div, Elem, Head, Hr, Html, Img,
-                      Li, Meta, Ol, P, Span, Table, Td, Text, Th, Title, Tr,
-                      Ul)
+                Li, Meta, Ol, P, Span, Table, Td, Text, Th, Title, Tr, Ul)
 
 HTML_CONTENT = (Head, Body)
 HEAD_CONTENT = (Title)
@@ -17,7 +15,7 @@ TABLE_CONTENT = (Tr)
 
 
 class Page:
-    def __init__(self, elem: Elem()):
+    def __init__(self, elem):
         if not isinstance(elem, (Elem, Text)):
             raise Elem.ValidationError
         self.elem = elem
@@ -50,7 +48,7 @@ class Page:
     def is_valid(self):
         return self.__recursive_check(self.elem)
 
-    def subelem_check(self, elem, instance_list=None):
+    def check_subelem(self, elem, instance_list=None):
         if instance_list:
             #print(instance_list)
             if (all(isinstance(e, instance_list) for e in elem.content)):
@@ -71,7 +69,7 @@ class Page:
         if isinstance(elem, Html):
             if len(elem.content) == 2 and \
                 isinstance(elem.content[0], Head) and isinstance(elem.content[1], Body):
-                if self.subelem_check(elem):
+                if self.check_subelem(elem):
                     return True
             else:
                 self.error_msg = (f"{elem.tag} tag must strictly contain a Head, then a Body.")
@@ -79,15 +77,15 @@ class Page:
         # Head
         elif isinstance(elem, Head): 
             if [isinstance(e, Title) for e in elem.content].count(True) == 1:
-                if self.subelem_check(elem):
+                if self.check_subelem(elem):
                     return True
             else:
                 self.error_msg = (f"{elem.tag} tag Head must only contain one Title and only one Title.")
 
         # Body, Div
         elif isinstance(elem, (Body, Div)):
-            if self.subelem_check(elem, BODY_CONTENT) and \
-                self.subelem_check(elem):
+            if self.check_subelem(elem, BODY_CONTENT) and \
+                self.check_subelem(elem):
                 return True
             else:
                 self.error_msg = (f"{elem.tag} tag must only contain the following type of elements: " \
@@ -102,15 +100,15 @@ class Page:
 
         # P
         elif isinstance(elem, P):
-            if self.subelem_check(elem, P_CONTENT):
+            if self.check_subelem(elem, P_CONTENT):
                 return True
             else:
                 self.error_msg = (f"{elem.tag} tag must contain Text.")
 
         # Span
         elif isinstance(elem, Span):
-            if self.subelem_check(elem, SPAN_CONTENT) and \
-                self.subelem_check(elem):
+            if self.check_subelem(elem, SPAN_CONTENT) and \
+                self.check_subelem(elem):
                 return True
             else:
                 self.error_msg = (f"{elem.tag} tag must only contain Text or some P.")
@@ -118,8 +116,8 @@ class Page:
         # Ul, Ol
         elif isinstance(elem, (Ul, Ol)):
             if len(elem.content) > 0 and \
-                self.subelem_check(elem, UL_CONTENT) and \
-                self.subelem_check(elem):
+                self.check_subelem(elem, UL_CONTENT) and \
+                self.check_subelem(elem):
                     return True
             else:
                 self.error_msg = (f"{elem.tag} tag must contain at least one Li and only some Li.")
@@ -132,7 +130,7 @@ class Page:
         # Table
         elif isinstance(elem, Table):
             if all(isinstance(e, Tr) for e in elem.content) and \
-                self.subelem_check(elem):
+                self.check_subelem(elem):
                     return True
             else:
                 self.error_msg = (f"{elem.tag} tag must only contain Tr and only some Tr.")

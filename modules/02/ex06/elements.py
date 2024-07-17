@@ -1,10 +1,6 @@
 from elem import Elem, Text
 
 
-class Html2(Elem):
-    def __init__(self, content=None, attr={}):
-        super().__init__(tag="html", attr=attr, content=content, tag_type="double")
-
 class Html(Elem):
     def __init__(self, content=None, attr={}):
         super().__init__(tag="html", attr=attr, content=content, tag_type="double")
@@ -87,7 +83,11 @@ class Br(Elem):
 
 if __name__ == '__main__':
     #print( Html( [Head(), Body()] ) )
-    elem = Html([Head(Title(Text('"Hello ground!"'))),
-				    Body([H1(Text('"Oh no, not again!"')),
-				            Img(attr={'src':'http://i.imgur.com/pfp3T.jpg'})])])
+    elem = Html([
+                Head(Title(Text('"Hello ground!"'))),
+                Body([
+                    H1(Text('"Oh no, not again!"')),
+                    Img(attr={'src':'http://i.imgur.com/pfp3T.jpg'})
+                    ])
+                ])
     print(elem)

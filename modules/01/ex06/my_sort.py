@@ -21,7 +21,7 @@ def sorting():
         'Thompson' : '1949',
         'Burton' : '1939',
         }
-    sorted_d = sorted(d.items(), key=lambda x: (x[1], x[0]))
+    sorted_d = sorted(d.items(), key=lambda x: (int(x[1]), x[0]))
 
     for key, value in sorted_d:
         print(key)

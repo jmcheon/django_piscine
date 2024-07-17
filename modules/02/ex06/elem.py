@@ -9,9 +9,6 @@ class Text(str):
     """
 
     def __str__(self):
-        """
-        Do you really need a comment to understand this method?..
-        """
         text = super().__str__().replace('<', '&lt;').replace('>', '&gt;')
         if text == '"':
             text = text.replace('"', '&quot;')
@@ -20,7 +17,7 @@ class Text(str):
 
 class Elem:
     """
-    Elem will permit us to represent our HTML elements.
+    Elem class will permit us to represent our HTML elements.
     """
     class ValidationError(Exception):
         def __init__(self, message="It's neither a Text nor an Elem"):
@@ -52,7 +49,7 @@ class Elem:
 
     def __make_attr(self):
         """
-        Here is a function to render our elements attributes.
+        A method to render our elements attributes.
         """
         result = ''
         for pair in sorted(self.attr.items()):
@@ -61,7 +58,7 @@ class Elem:
 
     def __make_content(self):
         """
-        Here is a method to render the content, including embedded elements.
+        A method to render the content, including embedded elements.
         """
 
         if len(self.content) == 0:
@@ -85,18 +82,18 @@ class Elem:
         Is this object a HTML-compatible Text instance or a Elem, or even a
         list of both?
         """
-        return (isinstance(content, Elem) or type(content) == Text or
-                (type(content) == list and all([type(elem) == Text or
-                                                isinstance(elem, Elem)
-                                                for elem in content])))
+        return (
+                isinstance(content, Elem) or type(content) == Text 
+                or (type(content) == list and all([isinstance(elem, Elem) or type(elem) == Text for elem in content]))
+                )
 
 
 if __name__ == '__main__':
-    elem = Elem(tag='html',
-				content=[Elem(tag='head',
-				    content=Elem(tag='title', content=Text('"Hello ground!"'))),
-				        Elem(tag='body',
-				            content=[Elem(tag='h1', content=Text('"Oh no, not again!"')),
-				                Elem(tag='img', tag_type='simple',
-				                    attr={'src':'http://i.imgur.com/pfp3T.jpg'})])])
+    elem = Elem(tag='html', content=[
+                Elem(tag='head', content=Elem(tag='title', content=Text('"Hello ground!"'))), 
+                Elem(tag='body', content=[
+                    Elem(tag='h1', content=Text('"Oh no, not again!"')), 
+                    Elem(tag='img', tag_type='simple', attr={'src':'http://i.imgur.com/pfp3T.jpg'})
+                ])
+            ])
     print(elem)
