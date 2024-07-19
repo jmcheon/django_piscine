@@ -82,10 +82,13 @@ class Elem:
         Is this object a HTML-compatible Text instance or a Elem, or even a
         list of both?
         """
-        return (
-                isinstance(content, Elem) or type(content) == Text 
-                or (type(content) == list and all([isinstance(elem, Elem) or type(elem) == Text for elem in content]))
-                )
+        is_elem_instance = isinstance(content, Elem)
+        is_text = type(content) == Text
+        is_elem_list = type(content) == list and all([isinstance(elem, Elem) or type(elem) == Text for elem in content])
+
+        requirements = [is_elem_instance, is_text, is_elem_list]
+
+        return any(requirements)
 
 
 if __name__ == '__main__':
