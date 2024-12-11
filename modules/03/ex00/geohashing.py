@@ -8,13 +8,13 @@ def geohashing():
         try:
             latitude = float(sys.argv[1])
             longitude = float(sys.argv[2])
-            data = (sys.argv[3])
+            date = (sys.argv[3])
         except Exception as e:
             print(f"Error occurred :{e}")
 
-        antigravity.geohash(latitude, longitude, data.encode())
+        antigravity.geohash(latitude, longitude, date.encode())
     else:
-        print(f"Usage: python3 {sys.argv[0]} latitude logitude datadow")
+        print(f"Usage: python3 {sys.argv[0]} latitude logitude date")
 
 if __name__ == "__main__":
     geohashing()

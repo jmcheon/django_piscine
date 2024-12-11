@@ -1,8 +1,0 @@
-#!/home/cjung-mo/Documents/42/web_branch/django_piscine/srcs/d03/ex01/local_lib/bin/python3
-# -*- coding: utf-8 -*-
-import re
-import sys
-from pip._internal.cli.main import main
-if __name__ == '__main__':
-    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
-    sys.exit(main())
