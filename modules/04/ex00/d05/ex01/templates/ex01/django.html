@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/style1.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design. Built by
+	experienced developers, it takes care of much of the hassle of web development, so you can focus on writing your app
+	without needing to reinvent the wheel. It's free and open source.</p>
+<p>Django's history began in the fall of 2003, when Adrian Holovaty and Simon Willison, web programmers at the Lawrence
+	Journal-World newspaper, began using Python to build web applications. It was publicly released under a BSD license in
+	July 2005.</p>
+{% endblock %}

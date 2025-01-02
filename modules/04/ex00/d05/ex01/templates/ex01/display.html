@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/style1.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>When a user requests a static page in a Django application:</p>
+<ol>
+	<li>The user's browser sends an HTTP request to the server.</li>
+	<li>Django's URL dispatcher checks the requested URL against the URL patterns defined in `urls.py`.</li>
+	<li>If a matching URL pattern is found, the associated view function is called.</li>
+	<li>The view function renders a template (HTML file) using the Django template engine.</li>
+	<li>The rendered HTML is returned as an HTTP response to the user's browser.</li>
+	<li>The browser receives the HTML and displays it to the user.</li>
+</ol>
+{% endblock %}

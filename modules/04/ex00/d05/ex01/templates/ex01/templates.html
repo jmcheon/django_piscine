@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/style2.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>The Django template engine allows dynamic content generation. Key features include:</p>
+<ul>
+	<li>
+		<strong>Blocks:</strong> Define placeholders in the base template that child templates can override.
+	</li>
+	<li>
+		<strong>Loops:</strong> Iterate over lists or dictionaries using {{ '{% for item in list %}' }} {{ '{% endfor %}'}}
+
+	</li>
+	<li>
+		<strong>If Control Structures:</strong> Use {{ '{% if condition %}'}} to conditionally render content. {{ '{% endif %}'}}
+	</li>
+	<li>
+		<strong>Context Variables:</strong> Pass data from views to templates for display using &#123;&#123; variable
+		&#125;&#125;.
+	</li>
+</ul>
+{% endblock %}
