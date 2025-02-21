@@ -10,7 +10,7 @@ def request(search_term: str):
     params = {
         "action": "query",
         "prop": "extracts",
-        "explaintext": False,
+        "explaintext": True,
         "titles": search_term,
         "format": "json",
         "redirects": 1,
@@ -30,10 +30,9 @@ def request(search_term: str):
 
         for page_id, page in pages.items():
             # print(page_id, page)
-            if page_id == -1:
+            if page_id == -1 or page.get("extract") is None:
                 print(f"No result found for '{search_term}'")
                 return
-
             raw_extract = page.get("extract").strip()
 
             if not raw_extract:

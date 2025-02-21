@@ -1,3 +1,6 @@
+local_lib
+django_venv
+test
 .vagrant
 vagrant/.nfs*
 # Byte-compiled / optimized / DLL files

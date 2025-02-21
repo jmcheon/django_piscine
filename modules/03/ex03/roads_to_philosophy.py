@@ -12,11 +12,25 @@ def get_first_link(url):
         title = soup.find("h1", id="firstHeading").text.strip()
 
         for content in soup.find_all("div", class_="mw-parser-output"):
+            parenthesis_count = 0
             for p in content.find_all("p", recursive=False):
-                for link in p.find_all("a", recursive=False):
-                    href = link.get("href")
-                    if href and href.startswith("/wiki/") and not href.startswith("/wiki/Help:"):
-                        return f"https://en.wikipedia.org{href}", title
+                for elem in p.descendants:
+                    text = str(elem)
+                    if "(" in text:
+                        parenthesis_count += text.count("(")
+                    if ")" in text:
+                        parenthesis_count -= text.count(")")
+
+                    if elem.name == "a":
+                        href = elem.get("href")
+                        if (
+                            href
+                            and href.startswith("/wiki/")
+                            and not href.startswith("/wiki/Help:")
+                            and parenthesis_count == 0
+                            and not elem.find_parent(["i", "em"])
+                        ):
+                            return f"https://en.wikipedia.org{href}", title
         return None, title
 
     except Exception:
@@ -30,7 +44,7 @@ def roads_to_philosophy(search_term: str) -> None:
 
     while True:
         if current_url in visited:
-            print("Infinite loop")
+            print("It leads to an infinite loop!")
             break
 
         next_url, title = get_first_link(current_url)
