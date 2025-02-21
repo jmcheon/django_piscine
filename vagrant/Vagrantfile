@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  SERVER_BOX = "ubuntu/bionic64"
+  SERVER_BOX = "ubuntu/jammy64" # Ubumtu 22.04 for Python 3.10
   SERVER_USERNAME = "cjung-mo"
   SERVER_USER_PASSWORD = "cjung-mo"
   SERVER_HOSTNAME = "vm-ubuntu"

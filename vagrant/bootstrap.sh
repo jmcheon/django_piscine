@@ -15,9 +15,9 @@ function create_user() {
 
 function installation() {
 	sudo apt update
-	sudo apt install -y python3 python3-pip
-	pip3 install Django
+	sudo apt install build-essential libpq-dev
+	sudo apt install -y python3 python3-pip python3-dev
 }
 
 create_user
-#installation
+installation
