@@ -13,3 +13,10 @@
 |   06   | Sessions | Or how a simple Django project can turn you into a black belt in permission and user management! |
 |   07   | Advanced | We will discover some of Django’s advanced functionalities |
 |   08   | Final | We’re gonna learn how to use AJAX and Websockets with Django |
+
+
+## Extra
+
+```bash
+export VAGRANT_HOME=/home/cjung-mo/sgoinfre/.vagrant.d
+```

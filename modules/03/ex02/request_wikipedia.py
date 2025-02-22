@@ -41,7 +41,7 @@ def request(search_term: str):
 
             extract = dewiki.from_string(raw_extract)
 
-            with open(f"{search_term}.txt", "w", encoding="utf-8") as f:
+            with open(f"{search_term}.wiki", "w", encoding="utf-8") as f:
                 f.write(extract)
 
     except requests.exceptions.RequestException as e:
