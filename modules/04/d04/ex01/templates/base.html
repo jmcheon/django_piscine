@@ -6,7 +6,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{% block title %}Default Title{% endblock %}</title>
-	{% block style %}{% endblock %}
+	{% block style %}
+	<link rel="stylesheet" href="{% static 'css/style1.css' %}">
+	{% endblock %}
+
 </head>
 
 <body>
