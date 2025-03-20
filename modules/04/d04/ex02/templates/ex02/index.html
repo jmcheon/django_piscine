@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Ex02: Premier formulaire</title>
+</head>
+
+<body>
+	<h1>Ex02: Premier formulaire</h1>
+	<form method="post">
+		<!-- protection against CSRF (Cross-Site Request Forgery) attacks -->
+		{% csrf_token %}
+		<!-- diplay automatically the form in html -->
+		{{ form.as_p }}
+		<button type="submit">Send</button>
+	</form>
+
+	<h2>Entry History</h2>
+	<ul>
+		{% for entry in history %}
+		<li>{{ entry }}</li>
+		{% empty %}
+		<li>No entry</li>
+		{% endfor %}
+	</ul>
+</body>
+
+</html>

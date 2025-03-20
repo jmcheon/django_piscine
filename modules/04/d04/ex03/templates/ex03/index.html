@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Fifty Shades of Bic</title>
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			text-align: center;
+		}
+
+		th,
+		td {
+			width: 80px;
+			height: 40px;
+			border: 1px solid black;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Fifty Shades of Bic</h1>
+	<table>
+		<tr>
+			<th>Black</th>
+			<th>Red</th>
+			<th>Blue</th>
+			<th>Green</th>
+		</tr>
+		{% for row in gradient_data %}
+		<tr>
+			{% for color in row %}
+			<td style="background-color: rgb({{color}});"></td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+
+
+</body>
+
+</html>

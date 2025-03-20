@@ -14,7 +14,10 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOG_FILE_PATH = os.path.join(BASE_DIR, "ex02", "logs.txt")
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ex00",
     "ex01",
+    "ex02",
+    "ex03",
 ]
 
 MIDDLEWARE = [
