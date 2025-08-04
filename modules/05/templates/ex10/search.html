@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Star Wars Search</title>
+</head>
+
+<body>
+	<h1>Search</h1>
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Search</button>
+	</form>
+
+	<hr>
+	<h2>Results</h2>
+	{% if results %}
+	<ul>
+		{% for item in results %}
+		<li>
+			{{ item.movie_title }} -
+			{{ item.character_name }} -
+			{{ item.character_gender }} -
+			{{ item.planet_name }} -
+			{{ item.planet_diameter }}
+		</li>
+		{% endfor %}
+	</ul>
+	{% else %}
+	<p>
+		{% if request.method == 'POST' %}
+		Nothing corresponding to your research.
+		{% else %}
+		Please use the form to search.
+		{% endif %}
+	</p>
+	{% endif %}
+</body>
+
+</html>
