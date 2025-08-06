@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Planets(models.Model):
-    # ... modèle complet de l'ex09 ...
     name = models.CharField(max_length=64, unique=True, null=False)
     climate = models.CharField(max_length=255, null=True, blank=True)
     diameter = models.IntegerField(null=True, blank=True)
@@ -19,7 +18,6 @@ class Planets(models.Model):
 
 
 class People(models.Model):
-    # ... modèle complet de l'ex09 ...
     name = models.CharField(max_length=64, unique=True, null=False)
     birth_year = models.CharField(max_length=32, null=True, blank=True)
     gender = models.CharField(max_length=32, null=True, blank=True)
@@ -38,17 +36,20 @@ class People(models.Model):
 
 
 class Movies(models.Model):
-    # Identique à ex01
+    # This model is based on ex01, with the new ManyToManyField.
     title = models.CharField(max_length=64, unique=True, null=False)
     episode_nb = models.IntegerField(primary_key=True)
-    opening_crawl = models.TextField(null=True)
+    opening_crawl = models.TextField(null=True, blank=True)
     director = models.CharField(max_length=32, null=False)
     producer = models.CharField(max_length=128, null=False)
     release_date = models.DateField(null=False)
 
-    # Le nouveau champ ManyToMany
-    # Django va créer une table intermédiaire pour lier les Films et les Personnages.
-    characters = models.ManyToManyField(People, related_name="films")
+    # This creates a many-to-many relationship between Movies and People.
+    # A movie can have many characters, and a character can be in many movies.
+    # Django will automatically create an intermediate table in the database to manage this link.
+    # We add related_name='movies' so that we can do person.movies.all()
+    characters = models.ManyToManyField(People, related_name='movies')
+
 
     def __str__(self):
         return self.title

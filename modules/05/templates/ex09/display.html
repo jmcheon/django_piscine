@@ -2,28 +2,35 @@
 <html>
 
 <head>
-	<title>Windy Worlds' Inhabitants</title>
+  <title>Characters from Windy Planets (ORM)</title>
 </head>
 
 <body>
-	<table border="1">
-		<thead>
-			<tr>
-				<th>Character Name</th>
-				<th>Homeworld</th>
-				<th>Climate</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for person in people %}
-			<tr>
-				<td>{{ person.name }}</td>
-				<td>{{ person.homeworld.name }}</td>
-				<td>{{ person.homeworld.climate }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+  <h1>Characters from Windy Planets</h1>
+  <hr>
+  {% if people %}
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Character Name</th>
+        <th>Homeworld</th>
+        <th>Climate</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for person in people %}
+      <tr>
+        <td>{{ person.name }}</td>
+        <td>{{ person.homeworld.name }}</td>
+        <td>{{ person.homeworld.climate }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No data available, please use the following command line before use:</p>
+  <code>{{ loaddata_command }}</code>
+  {% endif %}
 </body>
 
 </html>

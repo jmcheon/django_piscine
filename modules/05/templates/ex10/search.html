@@ -2,40 +2,49 @@
 <html>
 
 <head>
-	<title>Star Wars Search</title>
+  <title>Movie Character Search</title>
 </head>
 
 <body>
-	<h1>Search</h1>
-	<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Search</button>
-	</form>
+  <h1>Search for Characters</h1>
+  <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+  </form>
 
-	<hr>
-	<h2>Results</h2>
-	{% if results %}
-	<ul>
-		{% for item in results %}
-		<li>
-			{{ item.movie_title }} -
-			{{ item.character_name }} -
-			{{ item.character_gender }} -
-			{{ item.planet_name }} -
-			{{ item.planet_diameter }}
-		</li>
-		{% endfor %}
-	</ul>
-	{% else %}
-	<p>
-		{% if request.method == 'POST' %}
-		Nothing corresponding to your research.
-		{% else %}
-		Please use the form to search.
-		{% endif %}
-	</p>
-	{% endif %}
+  <hr>
+
+  <h2>Results</h2>
+  {% if results is not None %}
+  {% if results %}
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Character Name</th>
+        <th>Gender</th>
+        <th>Movie Title</th>
+        <th>Homeworld Name</th>
+        <th>Homeworld Diameter</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for person in results %}
+      {% for movie in person.movies.all %}
+      <tr>
+        <td>{{ person.name }}</td>
+        <td>{{ person.gender }}</td>
+        <td>{{ movie.title }}</td>
+        <td>{{ person.homeworld.name }}</td>
+        <td>{{ person.homeworld.diameter }}</td>
+      </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>Nothing corresponding to your research</p>
+  {% endif %}
+  {% endif %}
 </body>
 
 </html>

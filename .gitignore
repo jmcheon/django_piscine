@@ -1,3 +1,6 @@
+# Ignorer les migrations Django
+**/migrations/
+
 local_lib
 django_venv
 test

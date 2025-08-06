@@ -1,20 +1,21 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
+from .forms import UpdateForm
 from .models import Movies
 
 
 def populate(request):
-    """Peuple la table avec les données initiales."""
+    # This will populate the new table.
+    # Note that we don't need to provide 'created' or 'updated' values.
+    # Django handles them automatically thanks to auto_now_add and auto_now.
     movies_data = [
-        # Collez la liste complète des films ici
         {
             "episode_nb": 1,
             "title": "The Phantom Menace",
             "director": "George Lucas",
             "producer": "Rick McCallum",
             "release_date": "1999-05-19",
-            "opening_crawl": "",
         },
         {
             "episode_nb": 2,
@@ -22,7 +23,6 @@ def populate(request):
             "director": "George Lucas",
             "producer": "Rick McCallum",
             "release_date": "2002-05-16",
-            "opening_crawl": "",
         },
         {
             "episode_nb": 3,
@@ -30,7 +30,6 @@ def populate(request):
             "director": "George Lucas",
             "producer": "Rick McCallum",
             "release_date": "2005-05-19",
-            "opening_crawl": "",
         },
         {
             "episode_nb": 4,
@@ -38,15 +37,13 @@ def populate(request):
             "director": "George Lucas",
             "producer": "Gary Kurtz, Rick McCallum",
             "release_date": "1977-05-25",
-            "opening_crawl": "",
         },
         {
             "episode_nb": 5,
             "title": "The Empire Strikes Back",
             "director": "Irvin Kershner",
-            "producer": "Gary Kutz, Rick McCallum",
+            "producer": "Gary Kurtz, Rick McCallum",
             "release_date": "1980-05-17",
-            "opening_crawl": "",
         },
         {
             "episode_nb": 6,
@@ -54,7 +51,6 @@ def populate(request):
             "director": "Richard Marquand",
             "producer": "Howard G. Kazanjian, George Lucas, Rick McCallum",
             "release_date": "1983-05-25",
-            "opening_crawl": "",
         },
         {
             "episode_nb": 7,
@@ -62,50 +58,41 @@ def populate(request):
             "director": "J. J. Abrams",
             "producer": "Kathleen Kennedy, J. J. Abrams, Bryan Burk",
             "release_date": "2015-12-11",
-            "opening_crawl": "",
         },
     ]
     results = []
     for data in movies_data:
-        # get_or_create s'occupe de tout. Les champs created/updated sont gérés par le modèle.
-        movie, created = Movies.objects.get_or_create(
-            episode_nb=data["episode_nb"], defaults=data
-        )
-        if created:
-            results.append(f"OK: {movie.title} inserted.")
-        else:
-            results.append(f"OK: {movie.title} already exists.")
-    return HttpResponse("<br>".join(results))
+        Movies.objects.get_or_create(episode_nb=data["episode_nb"], defaults=data)
+        results.append("OK<br>")
+    return HttpResponse("".join(results))
 
 
 def display(request):
-    """Affiche tous les films de la base de données."""
     movies = Movies.objects.all()
-    if not movies.exists():
+    if not movies:
         return HttpResponse("No data available")
     return render(request, "ex07/display.html", {"movies": movies})
 
 
 def update(request):
-    """Gère le formulaire de mise à jour du 'opening_crawl'."""
     if request.method == "POST":
-        episode_nb = request.POST.get("movie_episode_nb")
-        new_crawl = request.POST.get("opening_crawl")
+        # Create a form instance and populate it with data from the request.
+        form = UpdateForm(request.POST)
+        # Check if the form is valid.
+        if form.is_valid():
+            # Process the data in form.cleaned_data.
+            movie_to_update = form.cleaned_data["movie"]
+            new_crawl = form.cleaned_data["opening_crawl"]
 
-        try:
-            # On récupère le film à modifier
-            movie_to_update = Movies.objects.get(episode_nb=episode_nb)
-            # On modifie le champ
+            # Update the field.
             movie_to_update.opening_crawl = new_crawl
-            # On sauvegarde. C'est ici que le champ 'updated' est automatiquement mis à jour.
+            # Save the object. This will automatically update the 'updated' field.
             movie_to_update.save()
-        except Movies.DoesNotExist:
-            return HttpResponse("Error: Movie not found.")
-        # On redirige pour éviter le re-post du formulaire si l'utilisateur rafraîchit
-        return redirect("update")
 
-    # Si la méthode est GET, on affiche le formulaire
-    movies = Movies.objects.all()
-    if not movies.exists():
-        return HttpResponse("No data available")
-    return render(request, "ex07/update.html", {"movies": movies})
+            # Redirect to the same page to prevent form re-submission.
+            return redirect("update")
+    else:
+        # If a GET (or any other method), create a blank form.
+        form = UpdateForm()
+
+    return render(request, "ex07/update.html", {"form": form})

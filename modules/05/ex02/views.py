@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 
 def get_connection():
-    """Fonction utilitaire pour obtenir une connexion à la base de données."""
+    """This function helps avoid repeating connection details."""
     try:
         return psycopg2.connect(
             dbname="formationdjango",
@@ -17,7 +17,7 @@ def get_connection():
 
 
 def init(request):
-    """Crée la table ex02_movies si elle n'existe pas."""
+    """This view creates the table for this exercise."""
     conn = get_connection()
     if not conn:
         return HttpResponse("Error: Could not connect to the database.")
@@ -42,8 +42,30 @@ def init(request):
         conn.close()
 
 
+# This function generates the full HTML page structure.
+# It takes a title and the main content as arguments.
+def render_full_html_page(page_title: str, content: str) -> str:
+    """
+    Wraps the given content in a full, valid HTML5 document structure.
+    """
+    return f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{page_title}</title>
+    </head>
+    <body>
+        <h1>{page_title}</h1>
+        <hr>
+        {content}
+    </body>
+    </html>
+    """
+
+
 def populate(request):
-    """Insère les données des films dans la table."""
+    """This view inserts data into the ex02_movies table."""
     movies_data = [
         {
             "episode_nb": 1,
@@ -119,7 +141,7 @@ def populate(request):
                     if cursor.rowcount > 0:
                         results.append(f"OK: {movie['title']} inserted.")
                     else:
-                        results.append(f"Error: {movie['title']} already exists.")
+                        results.append(f"OK: {movie['title']} already exists.")
 
                 except Exception as e:
                     results.append(f"Error inserting {movie['title']}: {e}")
@@ -133,36 +155,38 @@ def populate(request):
 
 
 def display(request):
-    """Affiche les données de la table dans un tableau HTML."""
-    conn = get_connection()
-    if not conn:
-        return HttpResponse("No data available")
-
+    """
+    Displays data by building the content and passing it to the HTML page helper.
+    """
     try:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM ex02_movies;")
-            movies = cursor.fetchall()
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT * FROM ex04_movies;")
+                movies = cursor.fetchall()
 
-            if not movies:
-                return HttpResponse("No data available")
+                if not movies:
+                    content = "No data available"
+                else:
+                    # Build the unique content (the table).
+                    table_content = "<table border='1'><tr>"
+                    headers = [desc[0] for desc in cursor.description]
+                    for header in headers:
+                        table_content += f"<th>{header}</th>"
+                    table_content += "</tr>"
+                    for movie in movies:
+                        table_content += "<tr>"
+                        for col in movie:
+                            table_content += (
+                                f"<td>{col if col is not None else 'N/A'}</td>"
+                            )
+                        table_content += "</tr>"
+                    table_content += "</table>"
+                    content = table_content
 
-            # Création du tableau HTML
-            html = "<table border='1'><tr>"
-            headers = [desc[0] for desc in cursor.description]
-            for header in headers:
-                html += f"<th>{header}</th>"
-            html += "</tr>"
+        # Pass the content to the helper function to build the full page.
+        full_page = render_full_html_page("Movies List (ex02)", content)
+        return HttpResponse(full_page)
 
-            for movie in movies:
-                html += "<tr>"
-                for col in movie:
-                    html += f"<td>{col if col is not None else 'N/A'}</td>"
-                html += "</tr>"
-            html += "</table>"
-
-            return HttpResponse(html)
-
-    except Exception:
-        return HttpResponse("No data available")
-    finally:
-        conn.close()
+    except Exception as e:
+        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        return HttpResponse(full_page)

@@ -25,6 +25,8 @@ class People(models.Model):
     hair_color = models.CharField(max_length=32, null=True, blank=True)
     height = models.IntegerField(null=True, blank=True)
     mass = models.FloatField(null=True, blank=True)
+    # This is the Foreign Key relationship.
+    # on_delete=models.CASCADE means if a planet is deleted, all people from that planet are also deleted.
     homeworld = models.ForeignKey(
         Planets, on_delete=models.CASCADE, null=True, blank=True
     )

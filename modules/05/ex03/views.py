@@ -77,23 +77,31 @@ def populate(request):
 
 def display(request):
     """
-    Affiche les données en utilisant l'ORM.
+    Displays the data using the ORM
     """
     try:
-        # Récupère tous les objets Movies de la base de données
+        # Retrieve all Movie objects from the database.
         movies = Movies.objects.all()
 
         if not movies:
             return HttpResponse("No data available")
 
-        # Crée un tableau HTML pour afficher les données
+        # Create an HTML table to display the data.
         html = "<table border='1'>"
-        html += "<tr><th>Title</th><th>Episode Nb</th><th>Director</th><th>Producer</th><th>Release Date</th></tr>"
+
+        html += "<tr><th>Episode Nb</th><th>Title</th><th>Opening Crawl</th><th>Director</th><th>Producer</th><th>Release Date</th></tr>"
 
         for movie in movies:
             html += "<tr>"
-            html += f"<td>{movie.title}</td>"
+
             html += f"<td>{movie.episode_nb}</td>"
+            html += f"<td>{movie.title}</td>"
+
+            opening_crawl_text = (
+                movie.opening_crawl if movie.opening_crawl is not None else "N/A"
+            )
+            html += f"<td>{opening_crawl_text}</td>"
+
             html += f"<td>{movie.director}</td>"
             html += f"<td>{movie.producer}</td>"
             html += f"<td>{movie.release_date}</td>"

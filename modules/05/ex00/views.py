@@ -2,39 +2,35 @@ import psycopg2
 from django.http import HttpResponse
 
 
-def init():
+def get_connection():
+    """This function helps avoid repeating connection details."""
     try:
-        # Connexion à la base de données
-        conn = psycopg2.connect(
+        return psycopg2.connect(
             dbname="formationdjango",
             user="djangouser",
             password="secret",
-            host="localhost",  # ou l'IP de la VM
+            host="localhost",
             port="5432",
         )
-        cursor = conn.cursor()
+    except psycopg2.OperationalError:
+        return None
 
-        # Requête SQL pour créer la table si elle n'existe pas
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS ex00_movies (
-            episode_nb INT PRIMARY KEY,
-            title VARCHAR(64) UNIQUE NOT NULL,
-            opening_crawl TEXT,
-            director VARCHAR(32) NOT NULL,
-            producer VARCHAR(128) NOT NULL,
-            release_date DATE NOT NULL
-        );
-        """
 
-        cursor.execute(create_table_query)
-        conn.commit()
-
-        # Fermeture de la connexion
-        cursor.close()
-        conn.close()
-
+def init(request):
+    """This view creates the table for this exercise."""
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                CREATE TABLE IF NOT EXISTS ex00_movies (
+                    episode_nb INT PRIMARY KEY,
+                    title VARCHAR(64) UNIQUE NOT NULL,
+                    opening_crawl TEXT,
+                    director VARCHAR(32) NOT NULL,
+                    producer VARCHAR(128) NOT NULL,
+                    release_date DATE NOT NULL
+                );
+                """)
         return HttpResponse("OK")
-
     except Exception as e:
-        # En cas d'erreur, on retourne un message décrivant le problème
-        return HttpResponse(f"Error: {e}")
+        return HttpResponse(f"An error occurred: {e}")

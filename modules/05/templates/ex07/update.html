@@ -2,25 +2,16 @@
 <html>
 
 <head>
-	<title>Update Movie</title>
+  <title>Update Movie (ex07)</title>
 </head>
 
 <body>
-	<form method="post" action="">
-		{% csrf_token %}
-		<label for="movie_select">Choose a movie:</label>
-		<select name="movie_episode_nb" id="movie_select">
-			{% for movie in movies %}
-			<option value="{{ movie.episode_nb }}">{{ movie.title }}</option>
-			{% endfor %}
-		</select>
-		<br><br>
-		<label for="crawl_text">Opening Crawl:</label>
-		<br>
-		<textarea name="opening_crawl" id="crawl_text" rows="10" cols="50"></textarea>
-		<br><br>
-		<button type="submit">Update</button>
-	</form>
+  <h1>Update a Movie's Opening Crawl</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Movie</button>
+  </form>
 </body>
 
 </html>

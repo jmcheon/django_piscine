@@ -1,43 +1,96 @@
+import json
+import os
+
+from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from .forms import SearchForm
-from .models import Movies
+from .models import Movies, People, Planets
 
 
 def search_view(request):
-    form = SearchForm(request.POST or None)
-    results = []
+    form = SearchForm(request.GET or None)
+    results = None
 
-    if request.method == "POST" and form.is_valid():
-        data = form.cleaned_data
+    if form.is_valid():
+        # If the form is submitted and valid, filter the data.
+        min_date = form.cleaned_data["min_release_date"]
+        max_date = form.cleaned_data["max_release_date"]
+        diameter = form.cleaned_data["planet_diameter"]
+        gender = form.cleaned_data["character_gender"]
 
-        # On filtre les films selon les critères du formulaire
-        # La magie de l'ORM permet de filtrer sur des modèles liés.
-        movies = (
-            Movies.objects.filter(
-                release_date__gte=data["min_release_date"],
-                release_date__lte=data["max_release_date"],
-                characters__gender=data["gender"],
-                characters__homeworld__diameter__gt=data["diameter_gt"],
+        # This is the complex ORM query that filters across all three models.
+        results = (
+            People.objects.filter(
+                gender=gender,
+                homeworld__diameter__gte=diameter,
+                movies__release_date__range=(min_date, max_date),
             )
             .distinct()
-            .prefetch_related("characters__homeworld")
+            .select_related("homeworld")
         )
+        # print(results)
 
-        # On prépare les résultats pour un affichage simple dans le template
-        for movie in movies:
-            for character in movie.characters.filter(
-                gender=data["gender"], homeworld__diameter__gt=data["diameter_gt"]
-            ):
-                results.append(
-                    {
-                        "movie_title": movie.title,
-                        "character_name": character.name,
-                        "character_gender": character.gender,
-                        "planet_name": character.homeworld.name,
-                        "planet_diameter": character.homeworld.diameter,
-                    }
-                )
+    return render(request, "ex10/search.html", {"form": form, "results": results})
 
-    context = {"form": form, "results": results}
-    return render(request, "ex10/search.html", context)
+
+def populate(request):
+    """
+    Manually populates the database from the fixture file.
+    It performs multiple passes and correctly handles null foreign keys.
+    """
+    # Clear existing data to make the view re-runnable
+    Movies.objects.all().delete()
+    People.objects.all().delete()
+    Planets.objects.all().delete()
+
+    fixture_path = os.path.join(settings.BASE_DIR, "ex10_initial_data.json")
+
+    try:
+        with open(fixture_path, "r") as f:
+            data = json.load(f)
+
+        # First pass: Create all Planet objects
+        for item in data:
+            if item["model"] == "ex10.planets":
+                Planets.objects.create(pk=item["pk"], **item["fields"])
+
+        # Second pass: Create all People objects
+        for item in data:
+            if item["model"] == "ex10.people":
+                fields = item["fields"]
+                homeworld_pk = fields.pop(
+                    "homeworld", None
+                )  # Use .pop with a default value
+
+                # Check if a homeworld was specified for this person.
+                if homeworld_pk is not None:
+                    # If there is a homeworld, find the Planet instance and link it.
+                    homeworld_instance = Planets.objects.get(pk=homeworld_pk)
+                    People.objects.create(
+                        pk=item["pk"], homeworld=homeworld_instance, **fields
+                    )
+                else:
+                    # If homeworld is null, create the Person without a homeworld link.
+                    People.objects.create(pk=item["pk"], homeworld=None, **fields)
+
+        # Third pass: Create Movies and their M2M relationships
+        for item in data:
+            if item["model"] == "ex10.movies":
+                # Remove fields that are not in the Movies model before creating the object
+                if "characters" in item["fields"]:
+                    character_pks = item["fields"].pop("characters")
+                else:
+                    character_pks = []
+
+                movie = Movies.objects.create(pk=item["pk"], **item["fields"])
+
+                # Set the many-to-many relationship after the movie is created
+                if character_pks:
+                    movie.characters.set(People.objects.filter(pk__in=character_pks))
+
+        return HttpResponse("Data populated successfully.")
+
+    except Exception as e:
+        return HttpResponse(f"An unexpected error occurred: {e}")

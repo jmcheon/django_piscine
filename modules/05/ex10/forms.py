@@ -4,25 +4,24 @@ from .models import People
 
 
 class SearchForm(forms.Form):
-    # On récupère les choix de genre, sans doublons, depuis la BDD
-    GENDER_CHOICES = [
-        (gender, gender.capitalize())
-        for gender in People.objects.values_list("gender", flat=True).distinct()
+    # Dynamically create choices for the gender dropdown, ensuring no duplicates.
+    GENDER_CHOICES = [("", "---------")] + [
+        (gender, gender)
+        for gender in People.objects.values_list("gender", flat=True)
+        .distinct()
+        .order_by("gender")
+        if gender
     ]
 
     min_release_date = forms.DateField(
-        label="Movies minimum release date",
-        widget=forms.DateInput(attrs={"type": "date"}),
-        required=True,
+        label="Movies minimum release date", required=True
     )
     max_release_date = forms.DateField(
-        label="Movies maximum release date",
-        widget=forms.DateInput(attrs={"type": "date"}),
-        required=True,
+        label="Movies maximum release date", required=True
     )
-    diameter_gt = forms.IntegerField(
+    planet_diameter = forms.IntegerField(
         label="Planet diameter greater than", required=True
     )
-    gender = forms.ChoiceField(
-        label="Character gender", choices=GENDER_CHOICES, required=True
+    character_gender = forms.ChoiceField(
+        choices=GENDER_CHOICES, label="Character gender", required=True
     )
