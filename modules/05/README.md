@@ -86,3 +86,9 @@ psql -d formationdjango
 ```sh
 sudo -u postgres psql -d formationdjango
 ```
+
+
+1970-01-01
+2000-01-01
+12000
+female

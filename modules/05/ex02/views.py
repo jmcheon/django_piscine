@@ -161,7 +161,7 @@ def display(request):
     try:
         with get_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM ex04_movies;")
+                cursor.execute("SELECT * FROM ex02_movies;")
                 movies = cursor.fetchall()
 
                 if not movies:
@@ -188,5 +188,6 @@ def display(request):
         return HttpResponse(full_page)
 
     except Exception as e:
-        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        full_page = render_full_html_page("", "No data available")
+        # full_page = render_full_html_page("Error", f"An error occurred: {e}")
         return HttpResponse(full_page)

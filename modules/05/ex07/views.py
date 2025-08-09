@@ -61,20 +61,57 @@ def populate(request):
         },
     ]
     results = []
-    for data in movies_data:
-        Movies.objects.get_or_create(episode_nb=data["episode_nb"], defaults=data)
-        results.append("OK<br>")
+    try:
+        for data in movies_data:
+            Movies.objects.get_or_create(episode_nb=data["episode_nb"], defaults=data)
+            results.append("OK<br>")
+    except Exception as e:
+        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        return HttpResponse(full_page)
     return HttpResponse("".join(results))
 
 
+def render_full_html_page(page_title: str, content: str) -> str:
+    """
+    wraps the given content in a full, valid html5 document structure.
+    """
+    return f"""
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{page_title}</title>
+    </head>
+    <body>
+        <h1>{page_title}</h1>
+        <hr>
+        {content}
+    </body>
+    </html>
+    """
+
+
 def display(request):
-    movies = Movies.objects.all()
-    if not movies:
-        return HttpResponse("No data available")
+    try:
+        movies = Movies.objects.all()
+        if not movies:
+            return HttpResponse("No data available")
+    except Exception:
+        full_page = render_full_html_page("", "No data available")
+        return HttpResponse(full_page)
     return render(request, "ex07/display.html", {"movies": movies})
 
 
 def update(request):
+    try:
+        if not Movies.objects.exists():
+            pass
+    except Exception as e:
+        full_page = render_full_html_page("", "No data available")
+        return HttpResponse(full_page)
+
+    # If the code reaches this point, we know at least one movie exists,
+    # so we can safely proceed with the form logic.
     if request.method == "POST":
         # Create a form instance and populate it with data from the request.
         form = UpdateForm(request.POST)

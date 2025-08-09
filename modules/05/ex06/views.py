@@ -139,7 +139,7 @@ def populate(request):
                     except Exception:
                         pass  # Ignore errors on individual inserts
         return HttpResponse(
-            "".join(results) if results else "All movies already populated."
+            "".join(results) if results else "No database connection found."
         )
     except Exception as e:
         return HttpResponse(f"An error occurred: {e}")
@@ -177,7 +177,8 @@ def display(request):
         full_page = render_full_html_page("Movies List (ex06)", content)
         return HttpResponse(full_page)
     except Exception as e:
-        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        full_page = render_full_html_page("", "No data available")
+        # full_page = render_full_html_page("Error", f"An error occurred: {e}")
         return HttpResponse(full_page)
 
 
@@ -221,5 +222,6 @@ def update(request):
         return HttpResponse(full_page)
 
     except Exception as e:
-        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        full_page = render_full_html_page("", "No data available")
+        # full_page = render_full_html_page("Error", f"An error occurred: {e}")
         return HttpResponse(full_page)

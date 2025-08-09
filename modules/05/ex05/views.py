@@ -9,13 +9,13 @@ from .models import Movies
 # It takes a title and the main content as arguments.
 def render_full_html_page(page_title: str, content: str) -> str:
     """
-    Wraps the given content in a full, valid HTML5 document structure.
+    wraps the given content in a full, valid html5 document structure.
     """
     return f"""
-    <!DOCTYPE html>
+    <!doctype html>
     <html lang="en">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
         <title>{page_title}</title>
     </head>
     <body>
@@ -85,6 +85,14 @@ def populate(request):
     ]
 
     results = []
+    try:
+        if not Movies.objects.exists():
+            pass
+    except Exception as e:
+        full_page = render_full_html_page("", "Error: Could not connect to the database.")
+        return HttpResponse(full_page)
+
+
     for data in movies_data:
         movie, created = Movies.objects.get_or_create(
             episode_nb=data["episode_nb"], defaults=data
@@ -127,7 +135,8 @@ def display(request):
         full_page = render_full_html_page("Movies List (ex05)", content)
         return HttpResponse(full_page)
     except Exception as e:
-        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        full_page = render_full_html_page("", "No data available")
+        # full_page = render_full_html_page("Error", f"An error occurred: {e}")
         return HttpResponse(full_page)
 
 
@@ -166,5 +175,6 @@ def remove(request):
         full_page = render_full_html_page("Remove a Movie (ex05)", content)
         return HttpResponse(full_page)
     except Exception as e:
-        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        full_page = render_full_html_page("", "No data available")
+        # full_page = render_full_html_page("Error", f"An error occurred: {e}")
         return HttpResponse(full_page)

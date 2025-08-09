@@ -177,7 +177,8 @@ def display(request):
         return HttpResponse(full_page)
 
     except Exception as e:
-        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        full_page = render_full_html_page("", "No data available")
+        # full_page = render_full_html_page("Error", f"An error occurred: {e}")
         return HttpResponse(full_page)
 
 
@@ -226,5 +227,6 @@ def remove(request):
         return HttpResponse(full_page)
 
     except Exception as e:
-        full_page = render_full_html_page("Error", f"An error occurred: {e}")
+        full_page = render_full_html_page("", "No data available")
+        # full_page = render_full_html_page("Error", f"An error occurred: {e}")
         return HttpResponse(full_page)
