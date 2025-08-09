@@ -20,24 +20,28 @@
   <table border="1">
     <thead>
       <tr>
+        <th>Movie Title</th>
         <th>Character Name</th>
         <th>Gender</th>
-        <th>Movie Title</th>
         <th>Homeworld Name</th>
         <th>Homeworld Diameter</th>
       </tr>
     </thead>
     <tbody>
-      {% for person in results %}
-      {% for movie in person.movies.all %}
-      <tr>
-        <td>{{ person.name }}</td>
-        <td>{{ person.gender }}</td>
-        <td>{{ movie.title }}</td>
-        <td>{{ person.homeworld.name }}</td>
-        <td>{{ person.homeworld.diameter }}</td>
-      </tr>
-      {% endfor %}
+      {% for movie in results %}
+        {% for person in movie.characters.all %}
+
+          {% if person.gender == form.cleaned_data.character_gender and person.homeworld.diameter >= form.cleaned_data.planet_diameter %}
+          <tr>
+            <td>{{ movie.title }}</td>
+            <td>{{ person.name }}</td>
+            <td>{{ person.gender }}</td>
+            <td>{{ person.homeworld.name }}</td>
+            <td>{{ person.homeworld.diameter }}</td>
+          </tr>
+          {% endif %}
+
+        {% endfor %}
       {% endfor %}
     </tbody>
   </table>

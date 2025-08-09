@@ -11,28 +11,28 @@ from .models import Movies, People, Planets
 
 def search_view(request):
     form = SearchForm(request.GET or None)
-    results = None
+    movies = None
 
     if form.is_valid():
-        # If the form is submitted and valid, filter the data.
         min_date = form.cleaned_data["min_release_date"]
         max_date = form.cleaned_data["max_release_date"]
         diameter = form.cleaned_data["planet_diameter"]
         gender = form.cleaned_data["character_gender"]
 
-        # This is the complex ORM query that filters across all three models.
-        results = (
-            People.objects.filter(
-                gender=gender,
-                homeworld__diameter__gte=diameter,
-                movies__release_date__range=(min_date, max_date),
+        movies = (
+            Movies.objects.filter(
+                # 1. Filter movies by release date.
+                release_date__range=(min_date, max_date),
+                # 2. Filter movies based on their characters' attributes.
+                characters__gender=gender,
+                characters__homeworld__diameter__gte=diameter,
             )
             .distinct()
-            .select_related("homeworld")
+            .prefetch_related("characters", "characters__homeworld")
         )
-        # print(results)
 
-    return render(request, "ex10/search.html", {"form": form, "results": results})
+    # print(f"Search results: {movies.values()}")
+    return render(request, "ex10/search.html", {"form": form, "results": movies})
 
 
 def populate(request):

@@ -29,6 +29,7 @@ class People(models.Model):
     # on_delete=models.CASCADE means if a planet is deleted, all people from that planet are also deleted.
     homeworld = models.ForeignKey(
         Planets, on_delete=models.CASCADE, null=True, blank=True
+        # Planets, on_delete=models.CASCADE, max_length=64, null=True, to_field="name", blank=True
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
