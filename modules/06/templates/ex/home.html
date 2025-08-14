@@ -1,0 +1,53 @@
+{% extends "ex/base.html" %}
+
+{% block content %}
+<h1>Welcome to Life Pro Tips</h1>
+
+{% if user.is_authenticated %}
+<hr>
+<h3>Post a new Tip!</h3>
+<form method="post">
+  {% csrf_token %}
+  {{ tip_form.as_p }}
+  <button type="submit">Post Tip</button>
+</form>
+<hr>
+{% endif %}
+
+<h2>Latest Tips</h2>
+{% for tip in tips %}
+<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+  <p>{{ tip.contenu }}</p>
+  <small>by <strong>{{ tip.auteur.username }}</strong> on {{ tip.date }}</small>
+  <br>
+  <small>
+    Upvotes: {{ tip.upvotes.count }} |
+    Downvotes: {{ tip.downvotes.count }}
+  </small>
+
+  {% if user.is_authenticated %}
+  <div style="margin-top: 5px;">
+    <a href="{% url 'upvote_tip' tip.pk %}">Upvote</a>
+    <!-- ex04 -->
+    <!-- {% if tip.auteur == user or perms.ex.can_downvote_tip %}
+    | <a href="{% url 'downvote_tip' tip.pk %}">Downvote</a>
+    {% endif %}
+
+    {% if tip.auteur == user or perms.ex.delete_tip %}
+    | <a href="{% url 'delete_tip' tip.pk %}">Delete</a>
+    {% endif %} -->
+    <!-- ex06 -->
+    {% if tip.auteur == user or user.reputation >= 15 %}
+		| <a href="{% url 'downvote_tip' tip.pk %}">Downvote</a>
+		{% endif %}
+
+		{% if tip.auteur == user or user.reputation >= 30 %}
+		| <a href="{% url 'delete_tip' tip.pk %}">Delete</a>
+		{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% empty %}
+<p>No tips have been posted yet. Be the first!</p>
+{% endfor %}
+{% endblock %}

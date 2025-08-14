@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Life Pro Tips</title>
+</head>
+
+<body>
+  <nav>
+    <a href="{% url 'home' %}">LifeProTips</a> |
+    {% if user.is_authenticated %}
+    Hello, {{ user.username }} ({{ user.reputation }})!
+    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+      {% csrf_token %}
+      <button type="submit"
+        style="background:none; border:none; padding:0; color:blue; text-decoration:underline; cursor:pointer;">
+        Logout
+      </button>
+    </form>
+    {% else %}
+    <span id="username-display">Hello!</span>
+    <!-- Hello, {{ request.session.username|default:'Guest' }}! -->
+    <a href="{% url 'login' %}">Login</a> |
+    <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
+  </nav>
+  <hr>
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+</body>
+
+{% if not user.is_authenticated %}
+<script>
+  // This function will run every 2 seconds
+  setInterval(updateUsername, 2000);
+
+  function updateUsername() {
+    fetch('/api/get-username/')
+      .then(response => response.json()) // Parse the JSON response
+      .then(data => {
+        // Find the element on the page
+        const usernameElement = document.getElementById('username-display');
+        // Update its content with the username from the server
+        usernameElement.textContent = 'Hello ' + data.username + '!';
+      })
+      .catch(error => {
+        // Log any error to the console
+        console.error('Error fetching username:', error);
+      });
+  }
+
+  // Call the function once immediately on page load
+  document.addEventListener('DOMContentLoaded', updateUsername); 
+</script>
+{% endif %}
+
+</html>
