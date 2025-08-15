@@ -1,0 +1,32 @@
+{% extends 'ex/base.html' %}
+{% load auth_tags %}
+
+{% block content %}
+<table class="table table-hover align-middle">
+  <thead class="table-light">
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Synopsis</th>
+      <th scope="col" class="text-end">Writer</th>
+      <th scope="col" class="text-end">Created</th>
+      <th scope="col" class="text-end">When</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for article in articles %}
+    <tr>
+      <td>{{ article.title }}</td>
+      <td>{{ article.synopsis|truncate_chars:20 }}</td>
+      <td class="text-end">{{ article.author.username }}</td>
+      <td class="text-end">{{ article.created|date:"M. d, Y, P" }}</td>
+      <td class="text-end">{{ article.created|timesince }} ago</td>
+      <td class="text-end">
+        <a href="{% url 'detail' article.id %}" class="btn btn-info btn-sm text-white">Read</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

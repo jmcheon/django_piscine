@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Articles</title>
+</head>
+
+<body>
+  <h1>All Articles</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Created</th>
+        <th>Synopsis</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for article in articles %}
+      <tr>
+        <td>{{ article.title }}</td>
+        <td>{{ article.author.username }}</td>
+        <td>{{ article.created }}</td>
+        <td>{{ article.synopsis }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+
+</html>

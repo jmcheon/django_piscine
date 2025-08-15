@@ -1,0 +1,45 @@
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
+from django.views.generic.base import RedirectView
+
+from .views import (
+    AddFavouriteView,
+    ArticleCreateView,
+    ArticleDetailView,
+    ArticleListView,
+    FavouriteListView,
+    PublicationListView,
+    RegisterView,
+)
+
+urlpatterns = [
+    # ex00
+    # The home URL must redirect to the articles page.
+    path("", RedirectView.as_view(url="/articles/", permanent=True), name="home"),
+    # The page to display all articles.
+    path("articles/", ArticleListView.as_view(), name="articles"),
+    path(
+        "login/",
+        LoginView.as_view(
+            template_name="ex/login.html", redirect_authenticated_user=True
+        ),
+        name="login",
+    ),
+
+    # ex01
+    # The detail view URL must capture the article's primary key (pk).
+    path("article/<int:pk>/", ArticleDetailView.as_view(), name="detail"),
+    # The logout view redirects to 'home' on success by default.
+    path("logout/", LogoutView.as_view(), name="logout"),
+    # Page for the connected user's publications.
+    path("publications/", PublicationListView.as_view(), name="publications"),
+    # Page for the connected user's favourites.
+    path("favourites/", FavouriteListView.as_view(), name="favourites"),
+
+    # ex02
+    path("register/", RegisterView.as_view(), name="register"),
+    path("publish/", ArticleCreateView.as_view(), name="publish"),
+    path(
+        "article/<int:pk>/favourite/", AddFavouriteView.as_view(), name="add_favourite"
+    ),
+]

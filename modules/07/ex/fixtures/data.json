@@ -1,0 +1,217 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$R9EXYHsAqfmzu0QWqyLFzl$ZXjc06ydpBQa8aK9LUedySnyV9AOqmgpTKNJrZO8Qzw=",
+        "last_login": "2025-08-11T10:29:13.022Z",
+        "is_superuser": true,
+        "username": "jungmoo",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-08-10T20:15:08.275Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$Rp6g1vKwT93jzdfAn9rZna$FHsuPtffg5SVcbdAdLm/w33vmfpLmEcS6eEej53HoBU=",
+        "last_login": "2025-08-11T11:16:03.271Z",
+        "is_superuser": false,
+        "username": "jung",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-10T20:17:40.545Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$LUU5LP98qWi0P4lkUQvNey$giK0y39NVUh45DHp9PioZtkF/bok/oyOvuP8OO7yxfA=",
+        "last_login": "2025-08-11T11:19:57.963Z",
+        "is_superuser": false,
+        "username": "moo",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-10T20:18:35.311Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+        "password": "!MiGHggUeyQ22rVpS8ICSdtTx7VXbLIi9rqPjcb1b",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "cheon",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-10T20:18:51.091Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$9yGdvHojnfWaa2qf7N7VZS$mUH1fLghxLsWzlSh0qM1d5JFzu6ZJDdGZdW+yT4tYBw=",
+        "last_login": "2025-08-12T11:49:59.721Z",
+        "is_superuser": false,
+        "username": "mou",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-11T15:02:19.710Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "ex.article",
+    "pk": 1,
+    "fields": {
+        "title": "number one",
+        "author": 2,
+        "created": "2025-08-10T20:19:14.928Z",
+        "synopsis": "haha",
+        "content": "this is number one article haha"
+    }
+},
+{
+    "model": "ex.article",
+    "pk": 2,
+    "fields": {
+        "title": "two two",
+        "author": 3,
+        "created": "2025-08-10T20:19:42.347Z",
+        "synopsis": "no way",
+        "content": "this is the second article"
+    }
+},
+{
+    "model": "ex.article",
+    "pk": 3,
+    "fields": {
+        "title": "un deux trois",
+        "author": 4,
+        "created": "2025-08-10T20:20:10.751Z",
+        "synopsis": "one two three",
+        "content": "trois is three ?"
+    }
+},
+{
+    "model": "ex.article",
+    "pk": 4,
+    "fields": {
+        "title": "four or quatre",
+        "author": 1,
+        "created": "2025-08-10T20:20:39.753Z",
+        "synopsis": "c'est la question",
+        "content": "I need a four"
+    }
+},
+{
+    "model": "ex.article",
+    "pk": 5,
+    "fields": {
+        "title": "55555",
+        "author": 2,
+        "created": "2025-08-10T20:21:13.401Z",
+        "synopsis": "there is 5 5",
+        "content": "did you get it?"
+    }
+},
+{
+    "model": "ex.article",
+    "pk": 6,
+    "fields": {
+        "title": "six pack",
+        "author": 5,
+        "created": "2025-08-11T15:15:36.555Z",
+        "synopsis": "I want it",
+        "content": "do you ?"
+    }
+},
+{
+    "model": "ex.article",
+    "pk": 7,
+    "fields": {
+        "title": "septembre",
+        "author": 5,
+        "created": "2025-08-11T16:29:16.582Z",
+        "synopsis": "c'est pas le septieme... je ne sais pas pourquoi",
+        "content": "c'est le monde"
+    }
+},
+{
+    "model": "ex.userfavouritearticle",
+    "pk": 1,
+    "fields": {
+        "user": 2,
+        "article": 2
+    }
+},
+{
+    "model": "ex.userfavouritearticle",
+    "pk": 2,
+    "fields": {
+        "user": 2,
+        "article": 4
+    }
+},
+{
+    "model": "ex.userfavouritearticle",
+    "pk": 3,
+    "fields": {
+        "user": 5,
+        "article": 1
+    }
+},
+{
+    "model": "ex.userfavouritearticle",
+    "pk": 4,
+    "fields": {
+        "user": 5,
+        "article": 6
+    }
+},
+{
+    "model": "ex.userfavouritearticle",
+    "pk": 6,
+    "fields": {
+        "user": 5,
+        "article": 5
+    }
+},
+{
+    "model": "ex.userfavouritearticle",
+    "pk": 7,
+    "fields": {
+        "user": 5,
+        "article": 7
+    }
+}
+]

@@ -1,0 +1,4 @@
+Django~=4.2.0  # Version LTS on 2025.08.10
+django-bootstrap-v5
+psycopg2-binary
+polib

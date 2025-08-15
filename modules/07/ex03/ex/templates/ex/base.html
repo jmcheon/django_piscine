@@ -1,0 +1,42 @@
+{% load auth_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>d06</title>
+</head>
+
+<body>
+
+  <nav>
+    <a href="{% url 'home' %}">Home</a> |
+    <a href="{% url 'articles' %}">Last Articles</a> |
+
+    {% if user.is_authenticated %}
+    <a href="{% url 'publications' %}">Publications</a> |
+    <a href="{% url 'favourites' %}">Favourites</a> |
+
+    <span>Logged as {{ user.username }}</span> |
+
+    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+    </form>
+    {% else %}
+    <a href="{% url 'register' %}">Register</a> |
+
+    {% login_form %}
+
+    {% endif %}
+  </nav>
+  <hr>
+
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+</body>
+
+</html>

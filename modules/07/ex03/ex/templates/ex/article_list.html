@@ -1,0 +1,38 @@
+{% extends 'ex/base.html' %}
+{% load auth_tags %}
+
+{% block content %}
+<h1>All Articles</h1>
+{% if user.is_authenticated %}
+<p>Hello, {{ user.username }}!
+<form action="{% url 'logout' %}" method="post" style="display: inline;">
+  {% csrf_token %}
+  <button type="submit">
+    Logout
+  </button>
+</form>
+</p>
+{% endif %}
+<table border="1">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Synopsis</th>
+      <th>Time Since Published</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for article in articles %}
+    <tr>
+      <td><a href="{% url 'detail' article.id %}">{{ article.title }}</a></td>
+      <td>{{ article.author.username }}</td>
+      <td>{{ article.synopsis|truncate_chars:20 }}</td>
+      <td>{{ article.created|timesince }} ago</td>
+      <td>{{ article.created }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

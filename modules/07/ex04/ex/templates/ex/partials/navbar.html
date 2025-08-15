@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'articles' %}">
+      <i class="bi bi-files me-2"></i>Articles
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav me-auto">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'favourites' %}">Favourites</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'publications' %}">Publications</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'register' %}">Register</a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <div class="d-flex align-items-center">
+        {% if user.is_authenticated %}
+        <span class="navbar-text me-3">
+          Logged as {{ user.username }}
+        </span>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-secondary btn-sm">Logout</button>
+        </form>
+        {% else %}
+        <form action="{% url 'login' %}" method="post" class="d-flex">
+          {% csrf_token %}
+          <input type="text" name="username" class="form-control form-control-sm me-2" placeholder="username" required>
+          <input type="password" name="password" class="form-control form-control-sm me-2" placeholder="password"
+            required>
+          <button type="submit" class="btn btn-light btn-sm">Login</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ article.title }}</title>
+</head>
+
+<body>
+  <h1>{{ article.title }}</h1>
+  <p><strong>Author:</strong> {{ article.author.username }}</p>
+  <p><strong>Published on:</strong> {{ article.created }}</p>
+  <p><strong>Synopsis:</strong> {{ article.synopsis }}</p>
+  <hr>
+  <div>
+    {{ article.content|linebreaks }}
+  </div>
+  {% if user.is_authenticated %}
+  <hr>
+  <h3>Add this article to your favourites</h3>
+  <form method="post" action="{% url 'add_favourite' article.pk %}">
+    {% csrf_token %}
+    <button type="submit">Add to Favourites</button>
+  </form>
+  {% endif %}
+</body>
+
+</html>
