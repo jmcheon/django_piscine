@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-rcxme)t$6#57rlc-y*%*8_pts&zj&-#ort_0a8h9i6&b$=w$+3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1"]
 
 
 # URL to redirect to for login, used by LoginRequiredMixin.
