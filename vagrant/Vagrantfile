@@ -10,8 +10,8 @@ Vagrant.configure("2") do |config|
       server.vm.box = SERVER_BOX 
       server.vm.hostname = "#{SERVER_HOSTNAME}" 
       server.vm.network "private_network", ip: "#{SERVER_IP}"
-	  server.vm.network "forwarded_port", guest: 8000, host: "8000"
-	  server.vm.network "forwarded_port", guest: 8080, host: "8080"
+	  server.vm.network "forwarded_port", guest: 8000, host: "8000", host_ip: "127.0.0.1"
+	  server.vm.network "forwarded_port", guest: 8080, host: "8080", host_ip: "127.0.0.1"
       #server.ssh.username = "#{SERVER_USERNAME}"
       server.vm.provider "virtualbox" do |vb|
         vb.memory = "8192"
