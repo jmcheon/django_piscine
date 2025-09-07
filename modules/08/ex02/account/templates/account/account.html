@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Account</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+
+  {% if user.is_authenticated %}
+  <div id="logout-section">
+    <p>Logged as {{ user.username }}</p>
+    <button id="logout-button">Logout</button>
+  </div>
+  {% else %}
+  <div id="login-section">
+    <form id="login-form" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+    </form>
+    <div id="error-messages" style="color: red;"></div>
+  </div>
+  {% endif %}
+
+  <script>
+    $(document).ready(function () {
+
+      // Helper function to get the CSRF token from the cookie.
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      const csrftoken = getCookie('csrftoken');
+
+      // --- LOGOUT AJAX CALL ---
+      $('#logout-button').on('click', function (event) {
+        event.preventDefault();
+        $.ajax({
+          type: "POST",
+          url: "/account/logout/",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          },
+        })
+          .done(function (data) {
+            window.location.reload();
+          })
+          .fail(function () {
+            alert("An error occurred during logout.");
+          });
+      });
+
+      // --- LOGIN AJAX CALL ---
+      $('#login-form').on('submit', function (event) {
+        event.preventDefault();
+        $.ajax({
+          type: "POST",
+          url: "/account/",
+          data: $(this).serialize(),
+          dataType: "json",
+        })
+          .done(function (data) {
+            window.location.reload();
+          })
+          .fail(function (jqXHR) {
+            // error handling
+            var errorContainer = $('#error-messages');
+            errorContainer.empty();
+
+            var errors = jqXHR.responseJSON.errors;
+            if (errors && errors.__all__) {
+              var errorList = $('<ul>');
+              errors.__all__.forEach(function (error) {
+                errorList.append($('<li>').text(error));
+              });
+              errorContainer.append(errorList);
+            }
+          });
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Room: {{ room_name }}</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    .chat-container {
+      display: flex;
+      height: 350px;
+    }
+
+    #user-list {
+      width: 20%;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-right: 10px;
+      overflow-y: auto;
+    }
+
+    .chat-area {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #chat-log {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      flex-grow: 1;
+      /* This property ensures a scrollbar appears when content overflows */
+      overflow-y: scroll;
+    }
+
+    #chat-message-form {
+      display: flex;
+    }
+
+    #chat-message-input {
+      flex-grow: 1;
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+
+    #chat-message-submit {
+      border: 1px solid #ccc;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    #user-list-ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Welcome to the "{{ room.name }}" chatroom!</h1>
+  {{ room_name|json_script:"room-name" }}
+
+  <div class="chat-container">
+    <div id="user-list">
+      <strong>Connected Users:</strong>
+      <ul id="user-list-ul">
+      </ul>
+    </div>
+
+    <div class="chat-area">
+      <div id="chat-log">
+      </div>
+      <form id="chat-message-form">
+        <input id="chat-message-input" type="text" placeholder="Type your message..." autocomplete="off">
+        <button id="chat-message-submit" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const chatLog = document.querySelector('#chat-log');
+    const chatMessageInput = document.querySelector('#chat-message-input');
+    const chatMessageSubmit = document.querySelector('#chat-message-submit');
+    const userListUl = document.querySelector('#user-list-ul');
+
+    const chatSocket = new WebSocket(
+      'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
+
+    chatSocket.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+
+      // Route the message based on its type
+      if (data.type === 'chat_message') {
+        // It's a regular or system message
+        const messageElement = document.createElement('p');
+        if (data.username === 'System') {
+          messageElement.innerHTML = `<i>${data.message}</i>`;
+        } else {
+          messageElement.innerHTML = `<b>${data.username}</b>: ${data.message}`;
+        }
+        chatLog.appendChild(messageElement);
+
+      } else if (data.type === 'user_list') {
+        // It's a user list update
+        userListUl.innerHTML = ''; // Clear the list
+        for (const user of data.users) {
+          const userElement = document.createElement('li');
+          userElement.textContent = user;
+          userListUl.appendChild(userElement);
+        }
+      }
+      chatLog.scrollTop = chatLog.scrollHeight;
+    };
+
+    chatSocket.onclose = function (e) {
+      console.error('Chat socket closed unexpectedly');
+    };
+
+    chatMessageInput.focus();
+    chatMessageInput.onkeyup = function (e) {
+      if (e.key === 'Enter') {
+        chatMessageSubmit.click();
+      }
+    };
+
+    chatMessageSubmit.onclick = function (e) {
+      e.preventDefault();
+      const message = chatMessageInput.value;
+      if (message.trim() !== '') {
+        chatSocket.send(JSON.stringify({
+          'message': message
+        }));
+        chatMessageInput.value = '';
+      }
+      return false;
+    };
+  </script>
+</body>
+
+</html>
